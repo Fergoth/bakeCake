@@ -5,4 +5,4 @@ def index(request):
     return render(request, 'index.html')
 
 def profile(request):
-    return render(request, 'lk.html')
+    return render(request, 'profile.html')
