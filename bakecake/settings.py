@@ -76,6 +76,10 @@ DATABASES = {
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'CustomUser.authentication.NoPasswordBackend',
+]
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -123,4 +127,4 @@ MEDIA_URL = '/media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = 'CustomUser.User'
+AUTH_USER_MODEL = 'custom_user.User'
