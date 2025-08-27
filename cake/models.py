@@ -66,7 +66,7 @@ class CakeOrder(models.Model):
     decor = models.ForeignKey(
         CakeDecor, on_delete=models.CASCADE, null=True, blank=True
     )
-    phrase = models.CharField(max_length=255, null=True, blank=True)
+    phrase_on_cake = models.CharField(max_length=255, null=True, blank=True)
     comment = models.CharField(max_length=255, null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     date = models.DateTimeField()
