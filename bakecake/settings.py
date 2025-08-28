@@ -78,7 +78,7 @@ DATABASES = {
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
-    'CustomUser.authentication.NoPasswordBackend',
+    'custom_user.authentication.NoPasswordBackend',
 ]
 
 AUTH_PASSWORD_VALIDATORS = [
