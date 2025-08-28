@@ -1,4 +1,5 @@
 Vue.createApp({
+    delimiters: ['[[', ']]'],
     name: "App",
     components: {
         VForm: VeeValidate.Form,
@@ -99,7 +100,7 @@ Vue.createApp({
                 }
             },
             DATA: {
-                Levels: ['не выбрано', '1', '2', '3'],
+                Levels: window.INITIAL_DATA.Levels,
                 Forms: ['не выбрано', 'Круг', 'Квадрат', 'Прямоугольник'],
                 Toppings: ['не выбрано', 'Без', 'Белый соус', 'Карамельный', 'Кленовый', 'Черничный', 'Молочный шоколад', 'Клубничный'],
                 Berries: ['нет', 'Ежевика', 'Малина', 'Голубика', 'Клубника'],
