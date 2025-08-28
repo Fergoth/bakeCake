@@ -29,7 +29,7 @@ Vue.createApp({
                 }
             },
             schema2: {
-                name: (value) => {
+/*                 name: (value) => {
                     if (value) {
                         return true;
                     }
@@ -97,18 +97,18 @@ Vue.createApp({
                         return true;
                     }
                     return ' время доставки';
-                }
+                } */
             },
             DATA: {
-                Levels: window.INITIAL_DATA.Levels,
-                Forms: ['не выбрано', 'Круг', 'Квадрат', 'Прямоугольник'],
+                Levels: window.INITIAL_DATA.levels,
+                Forms: window.INITIAL_DATA.forms,
                 Toppings: ['не выбрано', 'Без', 'Белый соус', 'Карамельный', 'Кленовый', 'Черничный', 'Молочный шоколад', 'Клубничный'],
                 Berries: ['нет', 'Ежевика', 'Малина', 'Голубика', 'Клубника'],
                 Decors: [ 'нет', 'Фисташки', 'Безе', 'Фундук', 'Пекан', 'Маршмеллоу', 'Марципан']
             },
             Costs: {
-                Levels: [0, 400, 750, 1100],
-                Forms: [0, 600, 400, 1000],
+                Levels: window.INITIAL_DATA.levels_price,
+                Forms: window.INITIAL_DATA.forms_price,
                 Toppings: [0, 0, 200, 180, 200, 300, 350, 200],
                 Berries: [0, 400, 300, 450, 500],
                 Decors: [0, 300, 400, 350, 300, 200, 280],
@@ -136,6 +136,11 @@ Vue.createApp({
         ToStep4() {
             this.Designed = true
             setTimeout(() => this.$refs.ToStep4.click(), 0);
+        },
+        Order(){
+            console.log(this.DATA.Levels[this.Levels], this.DATA.Forms[this.Form], this.DATA.Toppings[this.Topping], 
+                this.DATA.Berries[this.Berries], this.DATA.Decors[this.Decor], this.Words, this.Comments,
+                this.Name, this.Phone, this.Email, this.Address, this.Dates, this.Time, this.DelivComments, this.Cost)
         }
     },
     computed: {

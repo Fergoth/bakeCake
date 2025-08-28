@@ -128,19 +128,17 @@
 					</div>
 					<div class="d-flex align-items-center flex-wrap mb-3">
 						<span class="me-3 fs_40 cake_blue">Количество уровней</span>
-						{% for i in all_context.Levels|slice:"1:" %}
-						<v-field v-model="Levels" type="radio" name="lvls" id="num{{ i }}" value="{{ i }}" class="d-none cake__input"></v-field>
-						<label for="num{{ i }}" class="mx-2 px-3 py-1 cake_grey cake__label">{{ i }}</label>
+						{% for i in all_context.levels|slice:"1:" %}
+						<v-field v-model="Levels" type="radio" name="lvls" id="num{{ forloop.counter }}" value="{{ forloop.counter }}" class="d-none cake__input"></v-field>
+						<label for="num{{ forloop.counter }}" class="mx-2 px-3 py-1 cake_grey cake__label">{{ i }}</label>
 						{% endfor %}
 					</div>
 					<div class="d-flex align-items-center flex-wrap mb-3">
 						<span class="me-3 fs_40 cake_blue">Форма</span>
-						<v-field v-model="Form" type="radio" name="form" id="form1" value="1" class="d-none cake__input"></v-field>
-						<label for="form1" class="mx-2 px-3 py-1 cake_grey cake__label">Круг</label>
-						<v-field v-model="Form" type="radio" name="form" id="form2" value="2" class="d-none cake__input"></v-field>
-						<label for="form2" class="mx-2 px-3 py-1 cake_grey cake__label">Квадрат</label>
-						<v-field v-model="Form" type="radio" name="form" id="form3" value="3" class="d-none cake__input"></v-field>
-						<label for="form3" class="mx-2 px-3 py-1 cake_grey cake__label">Прямоугольник</label>
+						{% for i in all_context.forms|slice:"1:" %}
+						<v-field v-model="Form" type="radio" name="form" id="form{{ forloop.counter }}" value="{{ forloop.counter }}" class="d-none cake__input"></v-field>
+						<label for="form{{ forloop.counter }}" class="mx-2 px-3 py-1 cake_grey cake__label">{{ i }}</label>
+						{% endfor %}
 					</div>
 					<div class="d-flex align-items-center flex-wrap mb-3">
 						<span class="me-3 fs_40 cake_blue">Топпинг</span>
@@ -207,13 +205,13 @@
 
 			<section class="row pt-header" id="step4" v-if="Designed">
 				<form class="d-none">
-					{% for i in all_context.Levels|slice:"1:" %}
+					{% for i in all_context.levels|slice:"1:" %}
 					<input v-model="Levels" value="{{ forloop.counter }}" type="radio" name="LEVELS">
 					{% endfor %}
 					<br>
-					<input v-model="Form" value="1" type="radio" name="FORM">
-					<input v-model="Form" value="2" type="radio" name="FORM">
-					<input v-model="Form" value="3" type="radio" name="FORM">
+					{% for i in all_context.forms|slice:"1:" %}
+					<input v-model="Form" value="{{ forloop.counter }}" type="radio" name="FORM">
+					{% endfor %}
 					<br>
 					<input v-model="Topping" value="1" type="radio" name="TOPPING">
 					<input v-model="Topping" value="2" type="radio" name="TOPPING">
@@ -247,7 +245,7 @@
 					<input v-model="DelivComments" type="text" name="DELIVCOMMENTS">
 					<button type="submit" ref="HiddenFormSubmit">Submit Order</button>
 				</form>
-				<v-form :validation-schema="schema2" @submit="this.$refs.HiddenFormSubmit.click()">
+				<v-form :validation-schema="schema2" @submit="Order">
 					<div class="col">
 						<div class="d-flex flex-column position-relative pb-5">
 							<h2 class="fs_40 font_Gogh cake_blue text-center align-self-center">Оформление заказа</h2>
