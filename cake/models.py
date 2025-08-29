@@ -6,6 +6,7 @@ from custom_user.models import User
 class CakeLevel(models.Model):
     level = models.IntegerField(default=1)
     price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return f" {self.level} {self.price}Р"
@@ -14,6 +15,7 @@ class CakeLevel(models.Model):
 class CakeForm(models.Model):
     name = models.CharField(max_length=255)
     price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return f" {self.name} {self.price}Р"
@@ -22,6 +24,7 @@ class CakeForm(models.Model):
 class CakeTopping(models.Model):
     name = models.CharField(max_length=255)
     price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return f" {self.name} {self.price}Р"
@@ -30,6 +33,7 @@ class CakeTopping(models.Model):
 class CakeBerries(models.Model):
     name = models.CharField(max_length=255)
     price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return f" {self.name} {self.price}Р"
@@ -38,6 +42,7 @@ class CakeBerries(models.Model):
 class CakeDecor(models.Model):
     name = models.CharField(max_length=255)
     price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return f" {self.name} {self.price}Р"

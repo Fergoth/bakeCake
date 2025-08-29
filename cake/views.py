@@ -4,11 +4,11 @@ from .models import CakeLevel, CakeForm, CakeBerries, CakeTopping, CakeDecor, Cu
 
 # Create your views here.
 def index(request):
-    cake_levels = CakeLevel.objects.all()
-    cake_forms = CakeForm.objects.all()
-    cake_berries = CakeBerries.objects.all()
-    cake_toppings = CakeTopping.objects.all()
-    cake_decors = CakeDecor.objects.all()
+    cake_levels = CakeLevel.objects.all().filter(is_active=True)
+    cake_forms = CakeForm.objects.all().filter(is_active=True)
+    cake_berries = CakeBerries.objects.all().filter(is_active=True)
+    cake_toppings = CakeTopping.objects.all().filter(is_active=True)
+    cake_decors = CakeDecor.objects.all().filter(is_active=True)
     curent_phrase_price = CurentPhrasePrice.objects.all().first()
     context = {
         "all_context": {
