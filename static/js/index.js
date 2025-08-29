@@ -145,10 +145,16 @@ Vue.createApp({
     },
     computed: {
         Cost() {
+            const curr_date = new Date()
+            const combinedDateString = `${this.Dates}T${this.Time}`;
+            const date = new Date(combinedDateString);
+            const differenceInMilliseconds = date - curr_date;
+            const hoursDifference = differenceInMilliseconds / (1000 * 60 * 60); 
+            let K = hoursDifference <= 24 ? 1.2 : 1
             let W = this.Words ? this.Costs.Words : 0
-            return this.Costs.Levels[this.Levels] + this.Costs.Forms[this.Form] +
+            return (this.Costs.Levels[this.Levels] + this.Costs.Forms[this.Form] +
                 this.Costs.Toppings[this.Topping] + this.Costs.Berries[this.Berries] +
-                this.Costs.Decors[this.Decor] + W
+                this.Costs.Decors[this.Decor] + W) * K
         }
     }
 }).mount('#VueApp')
