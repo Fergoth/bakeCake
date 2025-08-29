@@ -164,6 +164,7 @@ Vue.createApp({
             console.log(this.DATA.Levels[this.Levels], this.DATA.Forms[this.Form], this.DATA.Toppings[this.Topping], 
                 this.DATA.Berries[this.Berries], this.DATA.Decors[this.Decor], this.Words, this.Comments,
                 this.Name, this.Phone, this.Email, this.Address, this.Dates, this.Time, this.DelivComments, this.Cost)
+            window.location.href = "/profile/"
         }
     },
     computed: {
