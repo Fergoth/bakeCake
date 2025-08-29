@@ -5,7 +5,7 @@ from .models import CakeLevel, CakeBerries, CakeDecor, CakeForm, CakeTopping, Ca
 # Register your models here.
 @admin.register(CakeLevel)
 class CakeLevelAdmin(admin.ModelAdmin):
-    list_display = ("level", "price")
+    list_display = ("name", "price")
 
 
 @admin.register(CakeBerries)
