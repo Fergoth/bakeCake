@@ -152,7 +152,7 @@
 						<span class="me-3 fs_40 cake_blue">Ягоды</span>
 						{% for i in all_context.berries|slice:"1:" %}
 						<v-field v-model="Berries" type="radio" name="berries" id="berries{{ forloop.counter }}" value="{{ forloop.counter }}" class="d-none cake__input"></v-field>
-						<label for="berries{{ forloop.counter }}" class="mx-2 px-3 py-1 cake_grey cake__label">{{id}}</label>
+						<label for="berries{{ forloop.counter }}" class="mx-2 px-3 py-1 cake_grey cake__label">{{i}}</label>
 						{% endfor %}
 					</div>
 					<div class="d-flex align-items-center flex-wrap mb-3">

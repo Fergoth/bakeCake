@@ -29,7 +29,7 @@ Vue.createApp({
                 }
             },
             schema2: {
-/*                 name: (value) => {
+                name: (value) => {
                     if (value) {
                         return true;
                     }
@@ -97,7 +97,7 @@ Vue.createApp({
                         return true;
                     }
                     return ' время доставки';
-                } */
+                } 
             },
             DATA: {
                 Levels: window.INITIAL_DATA.levels,
@@ -138,6 +138,29 @@ Vue.createApp({
             setTimeout(() => this.$refs.ToStep4.click(), 0);
         },
         Order(){
+            fetch('/save_order/', {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    level: this.DATA.Levels[this.Levels],
+                    form: this.DATA.Forms[this.Form],
+                    topping: this.DATA.Toppings[this.Topping],
+                    berries: this.DATA.Berries[this.Berries],
+                    decor: this.DATA.Decors[this.Decor],
+                    phrase_on_cake: this.Words,
+                    comment: this.Comments,
+                    Name: this.Name,
+                    Phone: this.Phone,
+                    Email: this.Email,
+                    Address: this.Address,
+                    date: this.Dates,
+                    time: this.Time,
+                    courier_comment: this.DelivComments,
+                    price: this.Cost
+                })
+            })
             console.log(this.DATA.Levels[this.Levels], this.DATA.Forms[this.Form], this.DATA.Toppings[this.Topping], 
                 this.DATA.Berries[this.Berries], this.DATA.Decors[this.Decor], this.Words, this.Comments,
                 this.Name, this.Phone, this.Email, this.Address, this.Dates, this.Time, this.DelivComments, this.Cost)
