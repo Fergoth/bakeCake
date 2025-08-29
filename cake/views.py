@@ -1,6 +1,7 @@
 import json
 from django.views.decorators.csrf import csrf_exempt
-from django.shortcuts import redirect, render
+from django.shortcuts import render
+from django.http import JsonResponse
 from .models import (
     CakeLevel,
     CakeForm,
@@ -57,7 +58,7 @@ def save_order(request):
             decor = None
         else:
             decor = CakeDecor.objects.get(name=data["decor"])
-        CakeOrder.objects.create(
+        order = CakeOrder.objects.create(
             level=level,
             form=form,
             berries=berries,
@@ -69,5 +70,4 @@ def save_order(request):
             courier_comment=data["courier_comment"],
             price=data["price"],
         )
-        return redirect("profile")
-        #TODO create user
+        return JsonResponse({"status": "success", "order_id": order.id})
