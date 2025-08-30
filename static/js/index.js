@@ -1,4 +1,5 @@
 Vue.createApp({
+    delimiters: ['[[', ']]'],
     name: "App",
     components: {
         VForm: VeeValidate.Form,
@@ -96,22 +97,22 @@ Vue.createApp({
                         return true;
                     }
                     return ' время доставки';
-                }
+                } 
             },
             DATA: {
-                Levels: ['не выбрано', '1', '2', '3'],
-                Forms: ['не выбрано', 'Круг', 'Квадрат', 'Прямоугольник'],
-                Toppings: ['не выбрано', 'Без', 'Белый соус', 'Карамельный', 'Кленовый', 'Черничный', 'Молочный шоколад', 'Клубничный'],
-                Berries: ['нет', 'Ежевика', 'Малина', 'Голубика', 'Клубника'],
-                Decors: [ 'нет', 'Фисташки', 'Безе', 'Фундук', 'Пекан', 'Маршмеллоу', 'Марципан']
+                Levels: window.INITIAL_DATA.levels,
+                Forms: window.INITIAL_DATA.forms,
+                Toppings: window.INITIAL_DATA.toppings,
+                Berries: window.INITIAL_DATA.berries,
+                Decors: window.INITIAL_DATA.decors
             },
             Costs: {
-                Levels: [0, 400, 750, 1100],
-                Forms: [0, 600, 400, 1000],
-                Toppings: [0, 0, 200, 180, 200, 300, 350, 200],
-                Berries: [0, 400, 300, 450, 500],
-                Decors: [0, 300, 400, 350, 300, 200, 280],
-                Words: 500
+                Levels: window.INITIAL_DATA.levels_price,
+                Forms: window.INITIAL_DATA.forms_price,
+                Toppings: window.INITIAL_DATA.toppings_price,
+                Berries: window.INITIAL_DATA.berries_price,
+                Decors: window.INITIAL_DATA.decors_price,
+                Words: window.INITIAL_DATA.curent_phrase_price
             },
             Levels: 0,
             Form: 0,
@@ -135,14 +136,48 @@ Vue.createApp({
         ToStep4() {
             this.Designed = true
             setTimeout(() => this.$refs.ToStep4.click(), 0);
+        },
+        Order(){
+            fetch('/save_order/', {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    level: this.DATA.Levels[this.Levels],
+                    form: this.DATA.Forms[this.Form],
+                    topping: this.DATA.Toppings[this.Topping],
+                    berries: this.DATA.Berries[this.Berries],
+                    decor: this.DATA.Decors[this.Decor],
+                    phrase_on_cake: this.Words,
+                    comment: this.Comments,
+                    Name: this.Name,
+                    Phone: this.Phone,
+                    Email: this.Email,
+                    Address: this.Address,
+                    date: this.Dates,
+                    time: this.Time,
+                    courier_comment: this.DelivComments,
+                    price: this.Cost
+                })
+            })
+            console.log(this.DATA.Levels[this.Levels], this.DATA.Forms[this.Form], this.DATA.Toppings[this.Topping], 
+                this.DATA.Berries[this.Berries], this.DATA.Decors[this.Decor], this.Words, this.Comments,
+                this.Name, this.Phone, this.Email, this.Address, this.Dates, this.Time, this.DelivComments, this.Cost)
         }
     },
     computed: {
         Cost() {
+            const curr_date = new Date()
+            const combinedDateString = `${this.Dates}T${this.Time}`;
+            const date = new Date(combinedDateString);
+            const differenceInMilliseconds = date - curr_date;
+            const hoursDifference = differenceInMilliseconds / (1000 * 60 * 60); 
+            let K = hoursDifference <= 24 ? 1.2 : 1
             let W = this.Words ? this.Costs.Words : 0
-            return this.Costs.Levels[this.Levels] + this.Costs.Forms[this.Form] +
+            return (this.Costs.Levels[this.Levels] + this.Costs.Forms[this.Form] +
                 this.Costs.Toppings[this.Topping] + this.Costs.Berries[this.Berries] +
-                this.Costs.Decors[this.Decor] + W
+                this.Costs.Decors[this.Decor] + W) * K
         }
     }
 }).mount('#VueApp')

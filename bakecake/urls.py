@@ -18,12 +18,13 @@ from django.contrib import admin
 from django.urls import path
 from custom_user import views
 
-from cake.views import index, profile
+from cake.views import index, profile, save_order
 urlpatterns = [
     path('', index, name='index'),
     path('profile/', profile, name='profile'),
     path('admin/', admin.site.urls),
     path('api/register/', views.register_user, name='register_user'),
     path('api/profile/', views.get_profile, name='get_profile'),
-    path('api/profile/update/', views.update_profile, name='update_profile')
+    path('api/profile/update/', views.update_profile, name='update_profile'),
+    path('save_order/', save_order, name='save_order'),
 ]
