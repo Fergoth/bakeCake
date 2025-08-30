@@ -62,6 +62,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'bakecake.wsgi.application'
 
+# Для обработки CSRF
+CSRF_TRUSTED_ORIGINS = ['http://localhost:8000', 'http://127.0.0.1:8000']
+CORS_ALLOW_CREDENTIALS = True
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
@@ -77,8 +80,7 @@ DATABASES = {
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',
-    'CustomUser.authentication.NoPasswordBackend',
+    'custom_user.authentication.NoPasswordBackend',
 ]
 
 AUTH_PASSWORD_VALIDATORS = [

@@ -19,50 +19,102 @@ Vue.createApp({
                         return true;
                     }
                     if ( !regex.test(value)) {
-
                         return '⚠ Формат телефона нарушен';
                     }
                     return true;
                 },
-                code_format: (value) => {
-                    const regex = /^[a-zA-Z0-9]+$/
+                name_format: (value) => {
                     if (!value) {
                         return true;
                     }
-                    if ( !regex.test(value)) {
-
-                        return '⚠ Формат кода нарушен';
+                    if (value.length < 2) {
+                        return '⚠ Имя должно содержать минимум 2 символа';
+                    }
+                    if (!/^[a-zA-Zа-яА-ЯёЁ\s\-]+$/.test(value)) {
+                        return '⚠ Имя содержит недопустимые символы';
                     }
                     return true;
                 }
             },
             Step: 'Number',
             RegInput: '',
-            EnteredNumber: ''
+            EnteredNumber: '',
+            EnteredName: '',
+            isLoading: false,
+            errorMessage: ''
         }
     },
     methods: {
-        RegSubmit() {
+        async RegSubmit() {
             if (this.Step === 'Number') {
-                this.$refs.HiddenFormSubmitReg.click()
-                this.Step = 'Code'
+                const phoneValid = this.RegSchema.phone_format(this.RegInput);
+                if (phoneValid !== true) {
+                    return;
+                }
+                this.Step = 'Name'
                 this.EnteredNumber = this.RegInput
                 this.RegInput = ''
             }
-            else {
-                this.$refs.HiddenFormSubmitReg.click()
-                this.Step = 'Finish'
-                this.RegInput = 'Регистрация успешна'
+            else if (this.Step === 'Name') {
+                const nameValid = this.RegSchema.name_format(this.RegInput);
+                if (nameValid !== true) {
+                    return;
+                }
+
+                this.isLoading = true;
+                this.errorMessage = '';
+
+                try {
+                    const response = await fetch('/api/register/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': this.getCookie('csrftoken')
+                        },
+                        body: JSON.stringify({
+                            phonenumber: this.EnteredNumber,
+                            name: this.RegInput
+                        })
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        this.Step = 'Finish';
+                        this.EnteredName = this.RegInput;
+                        this.RegInput = 'Регистрация успешна!';
+                    } else {
+                        const errorData = await response.json();
+                        this.errorMessage = errorData.phonenumber ?
+                            'Этот номер телефона уже зарегистрирован' :
+                            'Ошибка регистрации';
+                    }
+                } catch (error) {
+                    this.errorMessage = 'Ошибка соединения с сервером';
+                } finally {
+                    this.isLoading = false;
+                }
             }
         },
-        ToRegStep1() {
-            this.Step = 'Number'
-            this.RegInput = this.EnteredNumber
-        },
         Reset() {
-            this.Step = 'Number'
-            this.RegInput = ''
-            EnteredNumber = ''
+            this.Step = 'Number';
+            this.RegInput = '';
+            this.EnteredNumber = '';
+            this.EnteredName = '';
+            this.errorMessage = '';
+        },
+        getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
         }
     }
 }).mount('#RegModal')

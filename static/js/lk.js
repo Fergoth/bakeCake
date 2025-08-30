@@ -7,50 +7,81 @@ Vue.createApp({
     data() {
         return {
             Edit: false,
-            Name: 'Ирина',
-            Phone: '8 909 000-00-00',
-            Email: 'nyam@gmail.com',
+            Name: '',
+            Phone: '',
+            Email: '',
             Schema: {
-                name_format: (value) => {
-                    const regex = /^[a-zA-Zа-яА-я]+$/
-                    if (!value) {
-                        return '⚠ Поле не может быть пустым';
-                    }
-                    if ( !regex.test(value)) {
-
-                        return '⚠ Недопустимые символы в имени';
-                    }
-                    return true;
-                },
-                phone_format: (value) => {
-                    const regex = /^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$/
-                    if (!value) {
-                        return '⚠ Поле не может быть пустым';
-                    }
-                    if ( !regex.test(value)) {
-
-                        return '⚠ Формат телефона нарушен';
-                    }
-                    return true;
-                },
-                email_format: (value) => {
-                    const regex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i
-                    if (!value) {
-                        return '⚠ Поле не может быть пустым';
-                    }
-                    if ( !regex.test(value)) {
-
-                        return '⚠ Формат почты нарушен';
-                    }
-                    return true;
-                }
             }
         }
     },
+    mounted() {
+        this.loadProfile();
+    },
     methods: {
+        loadProfile() {
+            fetch('/api/profile/', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': this.getCookie('csrftoken')
+                },
+                credentials: 'same-origin'
+            })
+            .then(response => response.json())
+            .then(data => {
+                this.Name = data.name || '';
+                this.Phone = data.phonenumber || '';
+                this.Email = data.email || '';
+            })
+            .catch(error => {
+                console.error('Ошибка загрузки профиля:', error);
+            });
+        },
+
         ApplyChanges() {
-            this.Edit = false
-            this.$refs.HiddenFormSubmit.click()
+            this.Edit = false;
+
+            fetch('/api/profile/update/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': this.getCookie('csrftoken')
+                },
+                credentials: 'same-origin',
+                body: JSON.stringify({
+                    name: this.Name,
+                    phonenumber: this.Phone,
+                    email: this.Email
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    console.log('Профиль обновлен:', data.message);
+                    alert('Профиль успешно обновлен!');
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка обновления профиля:', error);
+                alert('Ошибка при обновлении профиля');
+            });
+        },
+
+        getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
         }
     }
-}).mount('#LK')
+}).mount('#LK');
