@@ -52,7 +52,8 @@ def get_profile(request):
     return Response({
         'name': user.name,
         'phonenumber': user.phonenumber,
-        'email': user.email if hasattr(user, 'email') else ''
+        'email': user.email if hasattr(user, 'email') else '',
+        'address': user.address if hasattr(user, 'address') else ''
     })
 
 
@@ -64,6 +65,7 @@ def update_profile(request):
     name = request.data.get('name')
     phonenumber = request.data.get('phonenumber')
     email = request.data.get('email')
+    address = request.data.get('address')
 
     if phonenumber and User.objects.exclude(id=user.id).filter(phonenumber=phonenumber).exists():
         return Response(
@@ -78,6 +80,8 @@ def update_profile(request):
         user.username = phonenumber
     if email:
         user.email = email
+    if address:
+        user.address = address
 
     try:
         user.save()
@@ -85,7 +89,8 @@ def update_profile(request):
             'message': 'Профиль успешно обновлен',
             'name': user.name,
             'phonenumber': user.phonenumber,
-            'email': user.email
+            'email': user.email,
+            'address': user.address
         })
     except IntegrityError:
         return Response(

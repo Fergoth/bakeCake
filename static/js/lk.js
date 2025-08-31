@@ -34,6 +34,7 @@ Vue.createApp({
                 this.Name = data.name || '';
                 this.Phone = data.phonenumber || '';
                 this.Email = data.email || '';
+                this.Address = data.address || '';
             })
             .catch(error => {
                 console.error('Ошибка загрузки профиля:', error);
@@ -53,7 +54,8 @@ Vue.createApp({
                 body: JSON.stringify({
                     name: this.Name,
                     phonenumber: this.Phone,
-                    email: this.Email
+                    email: this.Email,
+                    address: this.Address
                 })
             })
             .then(response => response.json())
