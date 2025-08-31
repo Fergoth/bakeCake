@@ -132,6 +132,15 @@ Vue.createApp({
             DelivComments: ''
         }
     },
+    mounted(){
+        console.log(window.INITIAL_DATA.user)
+        if (window.INITIAL_DATA.user){
+        this.Name = window.INITIAL_DATA.user.name
+        this.Phone = window.INITIAL_DATA.user.phone
+        this.Email = window.INITIAL_DATA.user.email
+        this.Address = window.INITIAL_DATA.user.address
+        }
+    },
     methods: {
         ToStep4() {
             this.Designed = true

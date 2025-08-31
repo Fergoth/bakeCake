@@ -36,6 +36,13 @@ def index(request):
             "curent_phrase_price": int(curent_phrase_price.price),
         }
     }
+    if request.user.is_authenticated:
+        context["all_context"]["user"] = {
+            "name": request.user.name or '',
+            "phone": request.user.phonenumber or '',
+            "email": request.user.email or '',
+            "address": request.user.address or '',
+        }
     return render(request, "index.html", context=context)
 
 
