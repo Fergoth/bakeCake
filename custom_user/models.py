@@ -11,7 +11,7 @@ class User(AbstractUser):
     name = models.CharField("Имя", max_length=255, blank=True, null=True)
     email = models.EmailField("Почта", max_length=255, blank=True, null=True)
     address = models.CharField("Адрес", max_length=255, blank=True, null=True)
-
+    
     class Meta:
         verbose_name = "Пользователь"
         verbose_name_plural = "Пользователи"
@@ -20,7 +20,7 @@ class User(AbstractUser):
         ]
 
     def save(self, *args, **kwargs):
-        self.phonenumber = self.username
+        self.username = self.phonenumber
         super().save(*args, **kwargs)
 
     def __str__(self):
