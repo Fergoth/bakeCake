@@ -9,7 +9,7 @@ class User(AbstractUser):
         "Номер телефона", null=False, blank=False, unique=True
     )
     name = models.CharField("Имя", max_length=255, blank=True, null=True)
-    email = models.CharField(max_length=30, blank=True, null=True)
+    address = models.CharField("Адрес", max_length=255, blank=True, null=True)
 
     class Meta:
         verbose_name = "Пользователь"
@@ -17,9 +17,8 @@ class User(AbstractUser):
         indexes = [
             models.Index(fields=["phonenumber"]),
         ]
-
     def save(self, *args, **kwargs):
-        self.username = self.phonenumber
+        self.phonenumber = self.username
         super().save(*args, **kwargs)
 
     def __str__(self):
