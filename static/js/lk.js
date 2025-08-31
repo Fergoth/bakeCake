@@ -1,4 +1,5 @@
 Vue.createApp({
+    delimiters: ['[[', ']]'],
     components: {
         VForm: VeeValidate.Form,
         VField: VeeValidate.Field,
