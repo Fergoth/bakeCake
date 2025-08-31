@@ -10,7 +10,7 @@ Vue.createApp({
             Name: '',
             Phone: '',
             Email: '',
-            Address: ''
+            Address: '',
             Schema: {
             }
         }

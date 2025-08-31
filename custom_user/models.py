@@ -17,6 +17,7 @@ class User(AbstractUser):
         indexes = [
             models.Index(fields=["phonenumber"]),
         ]
+
     def save(self, *args, **kwargs):
         self.phonenumber = self.username
         super().save(*args, **kwargs)

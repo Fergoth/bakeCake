@@ -29,7 +29,8 @@ def register_user(request):
             }
         )
 
-        login(request, user)
+        backend = 'custom_user.authentication.NoPasswordBackend'
+        login(request, user, backend=backend)
 
         return Response({
             'message': 'Пользователь успешно зарегистрирован',
