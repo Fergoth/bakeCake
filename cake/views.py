@@ -11,6 +11,8 @@ from .models import (
     CurentPhrasePrice,
     CakeOrder,
 )
+from custom_user.models import User
+from django.contrib.auth import login
 
 
 # Create your views here.
@@ -38,10 +40,10 @@ def index(request):
     }
     if request.user.is_authenticated:
         context["all_context"]["user"] = {
-            "name": request.user.name or '',
-            "phone": request.user.phonenumber or '',
-            "email": request.user.email or '',
-            "address": request.user.address or '',
+            "name": request.user.name or "",
+            "phone": request.user.phonenumber or "",
+            "email": request.user.email or "",
+            "address": request.user.address or "",
         }
     return render(request, "index.html", context=context)
 
@@ -77,4 +79,23 @@ def save_order(request):
             courier_comment=data["courier_comment"],
             price=data["price"],
         )
+        if request.user.is_authenticated:
+            order.user = request.user
+        else:
+            user, created = User.objects.get_or_create(
+                phonenumber=data["phonenumber"],
+                defaults={
+                    "name": data["name"],
+                    "email": data["email"],
+                    "address": data["address"],
+                },
+            )
+            order.user = user
+            if not created:
+                user.name = data["name"]
+                user.email = data["email"]
+                user.address = data["address"]
+                user.save()
+            backend = "custom_user.authentication.NoPasswordBackend"
+            login(request, user, backend=backend)
         return JsonResponse({"status": "success", "order_id": order.id})

@@ -160,15 +160,19 @@ Vue.createApp({
                     decor: this.DATA.Decors[this.Decor],
                     phrase_on_cake: this.Words,
                     comment: this.Comments,
-                    Name: this.Name,
-                    Phone: this.Phone,
-                    Email: this.Email,
-                    Address: this.Address,
+                    name: this.Name,
+                    phonenumber: this.Phone,
+                    email: this.Email,
+                    address: this.Address,
                     date: this.Dates,
                     time: this.Time,
                     courier_comment: this.DelivComments,
                     price: this.Cost
                 })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
             })
             console.log(this.DATA.Levels[this.Levels], this.DATA.Forms[this.Form], this.DATA.Toppings[this.Topping], 
                 this.DATA.Berries[this.Berries], this.DATA.Decors[this.Decor], this.Words, this.Comments,
