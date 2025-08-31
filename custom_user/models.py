@@ -9,6 +9,7 @@ class User(AbstractUser):
         "Номер телефона", null=False, blank=False, unique=True
     )
     name = models.CharField("Имя", max_length=255, blank=True, null=True)
+    email = models.EmailField("Почта", max_length=255, blank=True, null=True)
     address = models.CharField("Адрес", max_length=255, blank=True, null=True)
 
     class Meta:

@@ -71,6 +71,29 @@ Vue.createApp({
             });
         },
 
+        logout() {
+            fetch('/api/logout/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': this.getCookie('csrftoken')
+                },
+                credentials: 'same-origin'
+            })
+            .then(response => {
+                if (response.ok) {
+                    window.location.href = '/';
+                } else {
+                    console.error('Ошибка при выходе из системы');
+                    alert('Ошибка при выходе из системы');
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                alert('Ошибка при выходе из системы');
+            });
+        },
+
         getCookie(name) {
             let cookieValue = null;
             if (document.cookie && document.cookie !== '') {

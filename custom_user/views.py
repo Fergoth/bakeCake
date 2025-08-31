@@ -3,7 +3,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 
 from .models import User
 
@@ -92,3 +92,12 @@ def update_profile(request):
             {'error': 'Пользователь с таким номером уже существует'},
             status=status.HTTP_400_BAD_REQUEST
         )
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def logout_user(request):
+    logout(request)
+    return Response({
+        'message': 'Пользователь успешно вышел из системы'
+    }, status=status.HTTP_200_OK)
