@@ -28,8 +28,6 @@ def register_user(request):
                 'name': name
             }
         )
-        user.backend = 'custom_user.authentication.NoPasswordBackend'
-
         backend = 'custom_user.authentication.NoPasswordBackend'
         login(request, user, backend=backend)
 
