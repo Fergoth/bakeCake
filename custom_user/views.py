@@ -22,9 +22,9 @@ def register_user(request):
             )
 
         user, created = User.objects.get_or_create(
-            username=phonenumber,
             phonenumber=phonenumber,
             defaults={
+                'username': phonenumber,
                 'name': name
             }
         )
@@ -75,6 +75,7 @@ def update_profile(request):
         user.name = name
     if phonenumber:
         user.phonenumber = phonenumber
+        user.username = phonenumber
     if email:
         user.email = email
     if address:
