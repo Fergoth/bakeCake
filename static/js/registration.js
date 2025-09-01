@@ -83,6 +83,11 @@ Vue.createApp({
                         this.Step = 'Finish';
                         this.EnteredName = this.RegInput;
                         this.RegInput = 'Регистрация успешна!';
+
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1000);
+
                     } else {
                         const errorData = await response.json();
                         this.errorMessage = errorData.phonenumber ?
