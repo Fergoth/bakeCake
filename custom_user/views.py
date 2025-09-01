@@ -24,12 +24,9 @@ def register_user(request):
         user, created = User.objects.get_or_create(
             phonenumber=phonenumber,
             defaults={
-                'username': phonenumber,
                 'name': name
             }
         )
-        user.backend = 'custom_user.authentication.NoPasswordBackend'
-
         backend = 'custom_user.authentication.NoPasswordBackend'
         login(request, user, backend=backend)
 
@@ -77,7 +74,6 @@ def update_profile(request):
         user.name = name
     if phonenumber:
         user.phonenumber = phonenumber
-        user.username = phonenumber
     if email:
         user.email = email
     if address:
