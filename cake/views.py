@@ -61,7 +61,7 @@ def set_adv_cookie(request, adv_id):
 def save_order(request):
     if request.method == "POST":
         data = json.loads(request.body.decode("utf-8"))
-        adv_id = request.GET.get('adv_id') or request.session.get('adv_id')
+        adv_id = request.session.get('adv_id')
         level = CakeLevel.objects.get(name=data["level"])
         form = CakeForm.objects.get(name=data["form"])
         if data["berries"] == "нет":
