@@ -22,6 +22,7 @@ def register_user(request):
             )
 
         user, created = User.objects.get_or_create(
+            username=phonenumber,
             phonenumber=phonenumber,
             defaults={
                 'name': name
