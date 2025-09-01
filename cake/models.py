@@ -75,6 +75,7 @@ class CakeOrder(models.Model):
     phrase_on_cake = models.CharField(max_length=255, null=True, blank=True)
     comment = models.CharField(max_length=255, null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    adv_id = models.IntegerField(null=True, blank=True)
     date = models.DateTimeField()
     courier_comment = models.CharField(max_length=255, null=True, blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2, default=0)

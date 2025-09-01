@@ -18,7 +18,8 @@ from django.contrib import admin
 from django.urls import path
 from custom_user import views
 
-from cake.views import index, profile, save_order
+
+from cake.views import index, profile, save_order, set_adv_cookie
 urlpatterns = [
     path('', index, name='index'),
     path('profile/', profile, name='profile'),
@@ -30,4 +31,5 @@ urlpatterns = [
     path('api/profile/update/', views.update_profile, name='update_profile'),
     path('api/logout/', views.logout_user, name='logout'),
     path('save_order/', save_order, name='save_order'),
+    path('adv/<int:adv_id>/', set_adv_cookie, name='set_adv_cookie'),
 ]

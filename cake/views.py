@@ -1,6 +1,6 @@
 import json
 from django.views.decorators.csrf import csrf_exempt
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from .models import (
     CakeLevel,
@@ -52,10 +52,16 @@ def profile(request):
     return render(request, "profile.html")
 
 
+def set_adv_cookie(request, adv_id):
+    request.session['adv_id'] = adv_id
+    return redirect('index')
+
+
 @csrf_exempt
 def save_order(request):
     if request.method == "POST":
         data = json.loads(request.body.decode("utf-8"))
+        adv_id = request.GET.get('adv_id') or request.session.get('adv_id')
         level = CakeLevel.objects.get(name=data["level"])
         form = CakeForm.objects.get(name=data["form"])
         if data["berries"] == "нет":
@@ -78,6 +84,7 @@ def save_order(request):
             date=f"{data['date']}T{data['time']}",
             courier_comment=data["courier_comment"],
             price=data["price"],
+            adv_id=adv_id,
         )
         if request.user.is_authenticated:
             order.user = request.user
