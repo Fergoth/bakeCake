@@ -46,7 +46,7 @@ Vue.createApp({
                     if (!value) {
                         return true;
                     }
-                    if ( !regex.test(value)) {
+                    if (!regex.test(value)) {
 
                         return '⚠ Формат имени нарушен';
                     }
@@ -57,18 +57,18 @@ Vue.createApp({
                     if (!value) {
                         return true;
                     }
-                    if ( !regex.test(value)) {
+                    if (!regex.test(value)) {
 
                         return '⚠ Формат почты нарушен';
                     }
                     return true;
                 },
-                phone_format:(value) => {
+                phone_format: (value) => {
                     const regex = /^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$/
                     if (!value) {
                         return true;
                     }
-                    if ( !regex.test(value)) {
+                    if (!regex.test(value)) {
 
                         return '⚠ Формат телефона нарушен';
                     }
@@ -97,7 +97,7 @@ Vue.createApp({
                         return true;
                     }
                     return ' время доставки';
-                } 
+                }
             },
             DATA: {
                 Levels: window.INITIAL_DATA.levels,
@@ -132,13 +132,13 @@ Vue.createApp({
             DelivComments: ''
         }
     },
-    mounted(){
+    mounted() {
         console.log(window.INITIAL_DATA.user)
-        if (window.INITIAL_DATA.user){
-        this.Name = window.INITIAL_DATA.user.name
-        this.Phone = window.INITIAL_DATA.user.phone
-        this.Email = window.INITIAL_DATA.user.email
-        this.Address = window.INITIAL_DATA.user.address
+        if (window.INITIAL_DATA.user) {
+            this.Name = window.INITIAL_DATA.user.name
+            this.Phone = window.INITIAL_DATA.user.phone
+            this.Email = window.INITIAL_DATA.user.email
+            this.Address = window.INITIAL_DATA.user.address
         }
     },
     methods: {
@@ -146,11 +146,12 @@ Vue.createApp({
             this.Designed = true
             setTimeout(() => this.$refs.ToStep4.click(), 0);
         },
-        Order(){
-            fetch('/save_order/', {
+        Order() {
+            try {
+            const response = fetch('/save_order/', {
                 method: 'POST',
                 headers: {
-                'Content-Type': 'application/json',
+                    'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
                     level: this.DATA.Levels[this.Levels],
@@ -170,14 +171,16 @@ Vue.createApp({
                     price: this.Cost
                 })
             })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data)
-            })
-            console.log(this.DATA.Levels[this.Levels], this.DATA.Forms[this.Form], this.DATA.Toppings[this.Topping], 
+            
+                if (!response.ok) throw new Error('Ошибка сети');
+
+                window.location.href = "/profile/"
+            } catch (err) {
+                console.error('Ошибка:', err.message);
+            }
+            console.log(this.DATA.Levels[this.Levels], this.DATA.Forms[this.Form], this.DATA.Toppings[this.Topping],
                 this.DATA.Berries[this.Berries], this.DATA.Decors[this.Decor], this.Words, this.Comments,
                 this.Name, this.Phone, this.Email, this.Address, this.Dates, this.Time, this.DelivComments, this.Cost)
-            window.location.href = "/profile/"
         }
     },
     computed: {
@@ -186,7 +189,7 @@ Vue.createApp({
             const combinedDateString = `${this.Dates}T${this.Time}`;
             const date = new Date(combinedDateString);
             const differenceInMilliseconds = date - curr_date;
-            const hoursDifference = differenceInMilliseconds / (1000 * 60 * 60); 
+            const hoursDifference = differenceInMilliseconds / (1000 * 60 * 60);
             let K = hoursDifference <= 24 ? 1.2 : 1
             let W = this.Words ? this.Costs.Words : 0
             return (this.Costs.Levels[this.Levels] + this.Costs.Forms[this.Form] +
