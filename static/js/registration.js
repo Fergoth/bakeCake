@@ -52,9 +52,61 @@ Vue.createApp({
                 if (phoneValid !== true) {
                     return;
                 }
-                this.Step = 'Name'
-                this.EnteredNumber = this.RegInput
-                this.RegInput = ''
+
+                this.isLoading = true;
+                this.errorMessage = '';
+
+                try {
+                    const checkResponse = await fetch('/api/check-user/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': this.getCookie('csrftoken')
+                        },
+                        body: JSON.stringify({
+                            phonenumber: this.RegInput
+                        })
+                    });
+
+                    if (checkResponse.ok) {
+                        const checkData = await checkResponse.json();
+
+                        if (checkData.exists) {
+                            const loginResponse = await fetch('/api/login/', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRFToken': this.getCookie('csrftoken')
+                                },
+                                body: JSON.stringify({
+                                    phonenumber: this.RegInput
+                                })
+                            });
+
+                            if (loginResponse.ok) {
+                                this.Step = 'Finish';
+                                this.EnteredNumber = this.RegInput;
+                                this.RegInput = 'Вход выполнен успешно!';
+
+                                setTimeout(() => {
+                                    window.location.reload();
+                                }, 1000);
+                            } else {
+                                this.errorMessage = 'Ошибка входа';
+                            }
+                        } else {
+                            this.Step = 'Name';
+                            this.EnteredNumber = this.RegInput;
+                            this.RegInput = '';
+                        }
+                    } else {
+                        this.errorMessage = 'Ошибка проверки пользователя';
+                    }
+                } catch (error) {
+                    this.errorMessage = 'Ошибка соединения с сервером';
+                } finally {
+                    this.isLoading = false;
+                }
             }
             else if (this.Step === 'Name') {
                 const nameValid = this.RegSchema.name_format(this.RegInput);

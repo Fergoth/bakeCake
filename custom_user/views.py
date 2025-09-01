@@ -102,3 +102,50 @@ def logout_user(request):
     return Response({
         'message': 'Пользователь успешно вышел из системы'
     }, status=status.HTTP_200_OK)
+
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def check_user_exists(request):
+    phonenumber = request.data.get('phonenumber')
+
+    if not phonenumber:
+        return Response(
+            {'error': 'Телефон обязателен'},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    exists = User.objects.filter(phonenumber=phonenumber).exists()
+
+    return Response({
+        'exists': exists,
+        'phonenumber': phonenumber
+    }, status=status.HTTP_200_OK)
+
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def login_user(request):
+    phonenumber = request.data.get('phonenumber')
+
+    if not phonenumber:
+        return Response(
+            {'error': 'Телефон обязателен'},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    try:
+        user = User.objects.get(phonenumber=phonenumber)
+        backend = 'custom_user.authentication.NoPasswordBackend'
+        login(request, user, backend=backend)
+
+        return Response({
+            'message': 'Вход выполнен успешно',
+            'user_id': user.id
+        }, status=status.HTTP_200_OK)
+
+    except User.DoesNotExist:
+        return Response(
+            {'error': 'Пользователь не найден'},
+            status=status.HTTP_404_NOT_FOUND
+        )

@@ -24,6 +24,8 @@ urlpatterns = [
     path('profile/', profile, name='profile'),
     path('admin/', admin.site.urls),
     path('api/register/', views.register_user, name='register_user'),
+    path('api/check-user/', views.check_user_exists, name='check_user'),
+    path('api/login/', views.login_user, name='login'),
     path('api/profile/', views.get_profile, name='get_profile'),
     path('api/profile/update/', views.update_profile, name='update_profile'),
     path('api/logout/', views.logout_user, name='logout'),
