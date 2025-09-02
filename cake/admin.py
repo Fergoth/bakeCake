@@ -72,7 +72,9 @@ class ExportCsvMixin:
 class CakeOrderAdmin(admin.ModelAdmin, ExportCsvMixin):
     change_list_template = "expense_change_list.html"
     actions = ["export_as_csv"]
-    list_display = ("level", "form", "topping", "berries", "decor", "price")
+    list_filter = ("adv_id",)
+    search_fields = ("adv_id",)
+    list_display = ("level", "form", "topping", "berries", "decor", "price", "adv_id")
 
     def changelist_view(self, request, extra_context=None):
         total_amount = CakeOrder.objects.all().aggregate(total_sum=Sum("price"))
