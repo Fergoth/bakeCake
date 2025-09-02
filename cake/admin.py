@@ -78,11 +78,15 @@ class CakeOrderAdmin(admin.ModelAdmin, ExportCsvMixin):
 
     def changelist_view(self, request, extra_context=None):
         response = super().changelist_view(request, extra_context=extra_context)
-        if hasattr(response, 'context_data'):
-            queryset = response.context_data.get('cl').queryset
-            total_amount = queryset.aggregate(total_amount=Sum('price'))['total_amount']
-            response.context_data.update({
-                'total_amount': total_amount,
-            })
+        if hasattr(response, "context_data"):
+            try:
+                queryset = response.context_data["cl"].queryset
+            except (AttributeError, KeyError):
+                return response
+            total_amount = queryset.aggregate(total_amount=Sum("price"))["total_amount"]
+            response.context_data.update(
+                {
+                    "total_amount": total_amount,
+                }
+            )
         return response
-
