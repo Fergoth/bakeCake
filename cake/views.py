@@ -49,7 +49,11 @@ def index(request):
 
 
 def profile(request):
-    return render(request, "profile.html")
+    orders = CakeOrder.objects.filter(user=request.user).select_related(
+        "level", "form", "berries", "topping", "decor"
+    )
+    context = {"orders": orders}
+    return render(request, "profile.html", context=context)
 
 
 def set_adv_cookie(request, adv_id):

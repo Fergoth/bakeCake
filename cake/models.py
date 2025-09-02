@@ -79,6 +79,7 @@ class CakeOrder(models.Model):
     date = models.DateTimeField()
     courier_comment = models.CharField(max_length=255, null=True, blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    is_delivered = models.BooleanField(default=False)
 
 
 class PromoCode(models.Model):
