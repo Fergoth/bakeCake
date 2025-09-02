@@ -60,49 +60,57 @@ def set_adv_cookie(request, adv_id):
 @csrf_exempt
 def save_order(request):
     if request.method == "POST":
-        data = json.loads(request.body.decode("utf-8"))
-        adv_id = request.session.get('adv_id')
-        level = CakeLevel.objects.get(name=data["level"])
-        form = CakeForm.objects.get(name=data["form"])
-        if data["berries"] == "нет":
-            berries = None
-        else:
-            berries = CakeBerries.objects.get(name=data["berries"])
-        topping = CakeTopping.objects.get(name=data["topping"])
-        if data["decor"] == "нет":
-            decor = None
-        else:
-            decor = CakeDecor.objects.get(name=data["decor"])
-        order = CakeOrder.objects.create(
-            level=level,
-            form=form,
-            berries=berries,
-            topping=topping,
-            decor=decor,
-            phrase_on_cake=data["phrase_on_cake"],
-            comment=data["comment"],
-            date=f"{data['date']}T{data['time']}",
-            courier_comment=data["courier_comment"],
-            price=data["price"],
-            adv_id=adv_id,
-        )
-        if request.user.is_authenticated:
-            order.user = request.user
-        else:
-            user, created = User.objects.get_or_create(
-                phonenumber=data["phonenumber"],
-                defaults={
-                    "name": data["name"],
-                    "email": data["email"],
-                    "address": data["address"],
-                },
+        try:
+            data = json.loads(request.body.decode("utf-8"))
+            adv_id = request.session.get('adv_id')
+            level = CakeLevel.objects.get(name=data["level"])
+            form = CakeForm.objects.get(name=data["form"])
+            if data["berries"] == "нет":
+                berries = None
+            else:
+                berries = CakeBerries.objects.get(name=data["berries"])
+            topping = CakeTopping.objects.get(name=data["topping"])
+            if data["decor"] == "нет":
+                decor = None
+            else:
+                decor = CakeDecor.objects.get(name=data["decor"])
+            order = CakeOrder.objects.create(
+                level=level,
+                form=form,
+                berries=berries,
+                topping=topping,
+                decor=decor,
+                phrase_on_cake=data["phrase_on_cake"],
+                comment=data["comment"],
+                date=f"{data['date']}T{data['time']}",
+                courier_comment=data["courier_comment"],
+                price=data["price"],
+                adv_id=adv_id,
             )
-            order.user = user
-            if not created:
-                user.name = data["name"]
-                user.email = data["email"]
-                user.address = data["address"]
-                user.save()
-            backend = "custom_user.authentication.NoPasswordBackend"
-            login(request, user, backend=backend)
+        except Exception as e:
+            return JsonResponse({"status": "error on order", "message": str(e)})
+        try:
+            if request.user.is_authenticated:
+                order.user = request.user
+            else:
+                user, created = User.objects.get_or_create(
+                    phonenumber=data["phonenumber"],
+                    defaults={
+                        "name": data["name"],
+                        "email": data["email"],
+                        "address": data["address"],
+                        "username": data["phonenumber"],
+                    },
+                )
+                order.user = user
+                if not created:
+                    user.name = data["name"]
+                    user.email = data["email"]
+                    user.address = data["address"]
+                    user.save()
+                backend = "custom_user.authentication.NoPasswordBackend"
+                login(request, user, backend=backend)
+            order.save()
+        except Exception as e:
+            return JsonResponse({"status": "error on user", "message": str(e)})
         return JsonResponse({"status": "success", "order_id": order.id})

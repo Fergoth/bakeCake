@@ -140,40 +140,46 @@ Vue.createApp({
             this.Email = window.INITIAL_DATA.user.email
             this.Address = window.INITIAL_DATA.user.address
         }
+        else {
+            this.Name = 'test'
+            this.Phone = '899994343'
+            this.Email = 'ffff@gmail.com'
+            this.Address = 'Ул Пушкина'
+        }
     },
     methods: {
         ToStep4() {
             this.Designed = true
             setTimeout(() => this.$refs.ToStep4.click(), 0);
         },
-        Order() {
+        async Order() {
             try {
-            const response = fetch('/save_order/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    level: this.DATA.Levels[this.Levels],
-                    form: this.DATA.Forms[this.Form],
-                    topping: this.DATA.Toppings[this.Topping],
-                    berries: this.DATA.Berries[this.Berries],
-                    decor: this.DATA.Decors[this.Decor],
-                    phrase_on_cake: this.Words,
-                    comment: this.Comments,
-                    name: this.Name,
-                    phonenumber: this.Phone,
-                    email: this.Email,
-                    address: this.Address,
-                    date: this.Dates,
-                    time: this.Time,
-                    courier_comment: this.DelivComments,
-                    price: this.Cost
+                const response = await fetch('/save_order/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        level: this.DATA.Levels[this.Levels],
+                        form: this.DATA.Forms[this.Form],
+                        topping: this.DATA.Toppings[this.Topping],
+                        berries: this.DATA.Berries[this.Berries],
+                        decor: this.DATA.Decors[this.Decor],
+                        phrase_on_cake: this.Words,
+                        comment: this.Comments,
+                        name: this.Name,
+                        phonenumber: this.Phone,
+                        email: this.Email,
+                        address: this.Address,
+                        date: this.Dates,
+                        time: this.Time,
+                        courier_comment: this.DelivComments,
+                        price: this.Cost
+                    })
                 })
-            })
-            
-                if (!response.ok) throw new Error('Ошибка сети');
-
+                if (!response.ok) {
+                    throw new Error(response.statusText); 
+                }
                 window.location.href = "/profile/"
             } catch (err) {
                 console.error('Ошибка:', err.message);
