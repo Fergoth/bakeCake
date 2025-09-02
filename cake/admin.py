@@ -9,7 +9,7 @@ from .models import (
     CurentPhrasePrice,
 )
 import csv
-from io import StringIO
+from django.db.models import Sum
 from django.http import HttpResponse
 
 
@@ -70,5 +70,13 @@ class ExportCsvMixin:
 
 @admin.register(CakeOrder)
 class CakeOrderAdmin(admin.ModelAdmin, ExportCsvMixin):
+    change_list_template = "expense_change_list.html"
     actions = ["export_as_csv"]
     list_display = ("level", "form", "topping", "berries", "decor", "price")
+
+    def changelist_view(self, request, extra_context=None):
+        total_amount = CakeOrder.objects.all().aggregate(total_sum=Sum("price"))
+        context = {
+            "total": total_amount.get("total_sum") or 0,
+        }
+        return super().changelist_view(request, extra_context=context)
