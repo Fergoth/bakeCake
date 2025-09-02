@@ -95,7 +95,12 @@ def save_order(request):
             return JsonResponse({"status": "error on order", "message": str(e)})
         try:
             if request.user.is_authenticated:
-                order.user = request.user
+                user = request.user
+                order.user = user
+                user.name = data["name"]
+                user.email = data["email"]
+                user.address = data["address"]
+                user.save()
             else:
                 user, created = User.objects.get_or_create(
                     phonenumber=data["phonenumber"],
