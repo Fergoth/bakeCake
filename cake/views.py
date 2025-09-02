@@ -84,6 +84,7 @@ def save_order(request):
                 berries=berries,
                 topping=topping,
                 decor=decor,
+                address=data["address"],
                 phrase_on_cake=data["phrase_on_cake"],
                 comment=data["comment"],
                 date=f"{data['date']}T{data['time']}",
