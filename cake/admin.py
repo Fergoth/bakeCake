@@ -74,7 +74,7 @@ class CakeOrderAdmin(admin.ModelAdmin, ExportCsvMixin):
     actions = ["export_as_csv"]
     list_filter = ("adv_id",)
     search_fields = ("adv_id",)
-    list_display = ("level", "form", "topping", "berries", "decor", "price", "adv_id")
+    list_display = ("user", "price", "adv_id")
 
     def changelist_view(self, request, extra_context=None):
         response = super().changelist_view(request, extra_context=extra_context)
